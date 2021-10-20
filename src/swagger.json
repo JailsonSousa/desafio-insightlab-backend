@@ -10,7 +10,7 @@
   },
   "servers": [
     {
-      "url": "http://localhost:3333",
+      "url": "https://desafio-insightlab.herokuapp.com/api",
       "description": "URL da API"
     }
   ],
