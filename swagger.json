@@ -1,0 +1,302 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Desafio Insightlab Mobile",
+    "description": "API criada para o desafio da vaga de desenvolvedor full stack júnior especialista em aplicações móveis",
+    "version": "1.0.0",
+    "contact": {
+      "email": "jailson.sousa@insightlab.ufc.br"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3333",
+      "description": "URL da API"
+    }
+  ],
+
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "schema": {
+      "id": {
+        "type": "string",
+        "example": "d63d44d0-016f-4b22-b36d-c9f724f7344d"
+      },
+      "name": {
+        "type": "string",
+        "example": "Jailson Sousa"
+      },
+      "email": {
+        "type": "string",
+        "example": "jailson.sousa@insightlab.ufc.br"
+      },
+      "password": {
+        "type": "string",
+        "example": "12345#@$$%"
+      },
+      "jwtToken": {
+        "type": "string",
+        "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTdmZTQ0YzQzYWQwYjAwMThmOGQ5ZmQiLCJuYW1lIjoiV2FsZGVtYXIgTmV0byIsImVtYWlsIjoid2FsZGVtYXJudEBnbWFpbC5jb20iLCJwYXNzd29yZCI6IiQyYiQxMCRsUlZjWkc5d0dIVWJXcHF2TnJNR0F1SnNoWWJTR1RLSElQL3NycDlmTlkzZENFZDBJQjN6TyIsImlhdCI6MTU4NTQ0MDUxNywiZXhwIjoxNTg1NDYwNTE3fQ.JNtzLgCKGTAU9_-QjYUNxtM7X4nMU_pPIsNXDsEM-vP"
+      },
+      "created_at": {
+        "type": "date",
+        "example": "2021-10-20T00:39:31.489Z"
+      },
+      "updated_at": {
+        "type": "date",
+        "example": "2021-10-20T00:39:31.489Z"
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/id"
+          },
+          "name": {
+            "$ref": "#/components/schemas/name"
+          },
+          "email": {
+            "$ref": "#/components/schemas/email"
+          },
+          "created_at": {
+            "$ref": "#/components/schemas/created_at"
+          },
+          "updated_at": {
+            "$ref": "#/components/schemas/updated_at"
+          }
+        }
+      },
+      "CreateUser": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "$ref": "#/components/schemas/name"
+          },
+          "email": {
+            "$ref": "#/components/schemas/email"
+          },
+          "password": {
+            "$ref": "#/components/schemas/password"
+          }
+        }
+      },
+      "UserAuth": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "$ref": "#/components/schemas/email"
+          },
+          "password": {
+            "$ref": "#/components/schemas/password"
+          }
+        }
+      },
+      "AuthenticatedUserResponse": {
+        "type": "object",
+        "properties": {
+          "user": {
+            "type": "object",
+            "properties": {
+              "user": {
+                "$ref": "#/components/schemas/User"
+              },
+              "token": {
+                "$ref": "#/components/schemas/jwtToken"
+              }
+            }
+          }
+        }
+      },
+      "BeachCreatedResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/id"
+          },
+          "name": {
+            "$ref": "#/components/schemas/beachName"
+          },
+          "lat": {
+            "$ref": "#/components/schemas/beachLat"
+          },
+          "lng": {
+            "$ref": "#/components/schemas/beachLng"
+          },
+          "position": {
+            "$ref": "#/components/schemas/beachPosition"
+          }
+        }
+      }
+    }
+  },
+
+  "paths": {
+    "/users": {
+      "post": {
+        "tags": ["Usuário"],
+        "sumary": "Criar Conta",
+        "description": "Criar conta do usuário",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateUser",
+                "example": {
+                  "name": "Jailson de Sousa Bastos",
+                  "email": "jailson.sousa@insightlab.ufc.br",
+                  "password": "12345#@$$%"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Usuário criado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Email informado já está em usado"
+          },
+          "500": {
+            "description": "Verifique se falta alguma campo no corpo da requisição"
+          }
+        }
+      }
+    },
+    "/sessions/login": {
+      "post": {
+        "tags": ["Login"],
+        "sumary": "Realizar Login",
+        "description": "Realizar login de um usuário cadastro",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserAuth",
+                "example": {
+                  "email": "jailson.sousa@insightlab.ufc.br",
+                  "password": "12345678"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Retorna os dados do usuário cadastrado com o token de acesso"
+          },
+          "400": {
+            "description": "Email ou senha incorreto"
+          },
+          "500": {
+            "description": "Verifique se falta alguma campo no corpo da requisição"
+          }
+        }
+      }
+    },
+    "/citizens": {
+      "post": {
+        "tags": ["Cidadão"],
+        "sumary": "Cadastrar um cidadão",
+        "description": "Cadastrar cidadão que vai receber a vacina",
+        "security": [{"bearerAuth": []}],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "cpf": {
+                    "type": "string"
+                  },
+                  "birthDate": {
+                    "type": "date"
+                  },
+                  "vaccineName": {
+                    "type": "string"
+                  },
+                  "vaccineDose": {
+                    "type": "string"
+                  }
+                },
+                "example": {
+                  "email": "jailson.sousa@insightlab.ufc.br",
+                  "cpf": "00000000000",
+                  "birthDate": "2021-10-19T08:00:00",
+                  "vaccineName": "Pfizer",
+                  "vaccineDose": "1"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Retorna os dados do cidadão cadastrado"
+          },
+          "401": {
+            "description": "Token JWT ausente no Header ou Token JWT inválido"
+          },
+          "500": {
+            "description": "Verifique se falta alguma campo no corpo da requisição"
+          }
+        }
+      },
+      "get": {
+        "tags": ["Cidadão"],
+        "sumary": "Listar cidadãos",
+        "description": "Lista todos os cidadãos vacinados",
+        "security": [{"bearerAuth": []}],
+        "responses": {
+          "200": {
+            "description": "Retorna todos os cidadões cadastrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "cpf": {
+                      "type": "string"
+                    },
+                    "birthDate": {
+                      "type": "date"
+                    },
+                    "vaccineName": {
+                      "type": "string"
+                    },
+                    "vaccineDose": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Token JWT ausente no Header ou Token JWT inválido"
+          }
+        }
+      }
+    }
+  }
+}
