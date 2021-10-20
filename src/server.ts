@@ -9,7 +9,7 @@ import swaggerUI from 'swagger-ui-express';
 
 import cors from 'cors';
 import routes from './routes';
-import swaggerFile from '../swagger.json';
+import swaggerFile from './swagger.json';
 
 import AppError from './errors/AppError';
 
